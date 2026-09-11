@@ -9,5 +9,5 @@
 # this keeps any unexpected deep link from 404ing instead of loading the app
 [[redirects]]
   from = "/*"
-  to = "/index.html
+  to = "/index.html"
   status = 200
