@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Single-page static site — no client-side routes to fall back for, but
+# this keeps any unexpected deep link from 404ing instead of loading the app.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
