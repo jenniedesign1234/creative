@@ -1,0 +1,17 @@
+{
+  "name": "creative-club",
+  "version": "1.0.0",
+  "description": "Creative Club — Keeping Art Alive. Drawing, sketching, coloring & painting classes for kids in Ranchi.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vite": "^6.3.6"
+  }
+}

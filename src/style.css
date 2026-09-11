@@ -1,0 +1,1613 @@
+/* ============================================================
+   CREATIVE CLUB — design tokens
+   Warm cream paper + rainbow accents, matching the studio's own
+   flyer: bright, textured, hand-crafted, unmistakably for kids.
+   ============================================================ */
+:root {
+  color-scheme: light;
+
+  --cream: #fbf3dc;
+  --paper: #fffdf6;
+  --paper-warm: #fff8e8;
+
+  --navy: #1e2a5e;
+  --navy-deep: #121a3f;
+  --ink: #33314a;
+  --ink-soft: #5b5878;
+  --ink-faint: #8c88a6;
+
+  --red: #e8453c;
+  --orange: #f5a623;
+  --yellow: #f7d51d;
+  --green: #6fbe44;
+  --olive: #a9c23f;
+  --purple: #7b5ea7;
+  --lavender: #c9b8e8;
+  --lavender-soft: #ede6fa;
+  --pink: #f0699a;
+  --blue: #3e8fe0;
+
+  --whatsapp: #25d366;
+  --whatsapp-dark: #1da851;
+
+  --line: rgba(30, 42, 94, 0.12);
+  --line-soft: rgba(30, 42, 94, 0.08);
+  --shadow-soft: 0 10px 26px -12px rgba(60, 40, 10, 0.22);
+  --shadow-lift: 0 18px 34px -14px rgba(60, 40, 10, 0.3);
+
+  --font-display: "Fredoka", "Baloo 2", "Segoe UI", sans-serif;
+  --font-body: "Nunito", "Segoe UI", sans-serif;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 0.25s;
+  --dur-med: 0.5s;
+
+  --gutter: clamp(20px, 6vw, 88px);
+  --content-max: 1240px;
+  --header-h: 78px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Faint paper-grain texture over the whole page — a small, "crafted"
+   touch that keeps flat colour fields from feeling too digital/flat.
+   One static SVG noise fill, no runtime cost. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+address {
+  font-style: normal;
+}
+
+::selection {
+  background: var(--yellow);
+  color: var(--navy);
+}
+
+.skip-link {
+  position: fixed;
+  top: -60px;
+  left: 12px;
+  z-index: 500;
+  background: var(--navy);
+  color: var(--paper);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-family: var(--font-display);
+  transition: top var(--dur-fast) var(--ease-out);
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ============================================================
+   Confetti canvas — soft, slow-drifting paint-drop background.
+   Sits behind everything, low particle count, plain 2D canvas
+   (no WebGL) so it costs almost nothing on any device.
+   ============================================================ */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  display: block;
+  pointer-events: none;
+}
+
+/* ============================================================
+   Layout shell
+   ============================================================ */
+#app {
+  position: relative;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+.section {
+  position: relative;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: clamp(56px, 9vw, 120px) var(--gutter);
+  /* Keeps the sticky header from covering a section's heading when a nav
+     link jumps straight to it. */
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+
+.section-head {
+  max-width: 680px;
+  margin: 0 auto clamp(32px, 5vw, 56px);
+  text-align: center;
+}
+
+.section-tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--purple);
+  background: var(--lavender-soft);
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+  line-height: 1.2;
+  color: var(--navy);
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 var(--gutter);
+  /* Fully opaque: a translucent header let hero decoration bleed through
+     unpredictably at certain scroll/viewport combinations. */
+  background: var(--cream);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  display: inline-flex;
+  filter: drop-shadow(0 3px 6px rgba(30, 42, 94, 0.18));
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--navy);
+}
+
+.brand-tagline {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--pink);
+  text-transform: uppercase;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.site-nav a:not(.nav-whatsapp) {
+  position: relative;
+  padding: 6px 2px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.site-nav a:not(.nav-whatsapp)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 3px;
+  width: 100%;
+  border-radius: 3px;
+  background: var(--yellow);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.site-nav a:not(.nav-whatsapp):hover::after {
+  transform: scaleX(1);
+}
+
+.nav-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--whatsapp);
+  color: #fff;
+  padding: 9px 18px;
+  border-radius: 100px;
+  font-weight: 700;
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+
+.nav-whatsapp:hover {
+  background: var(--whatsapp-dark);
+  transform: translateY(-2px);
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 34px;
+  padding: 6px;
+  flex-shrink: 0;
+}
+
+.nav-toggle span {
+  /* Explicit width rather than relying on flex stretch, which has been
+     unreliable for bare <span> flex items in practice — see the mobile
+     nav height issue in the previous build for the same lesson. */
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--navy);
+  transition: transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+}
+
+@media (max-width: 860px) {
+  .site-nav {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    height: calc(100vh - var(--header-h));
+    height: calc(100dvh - var(--header-h));
+    flex-direction: column;
+    justify-content: center;
+    gap: 26px;
+    font-size: 1.25rem;
+    background: var(--paper);
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  }
+  .site-nav.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Boxy, themed link chips — a colored outline per link (cycling the
+     brand's rainbow) instead of the underline-on-hover treatment, which
+     doesn't read well as a tap target on touch anyway. Plain CSS on the
+     existing markup, nothing structural. */
+  .site-nav a:not(.nav-whatsapp) {
+    display: block;
+    width: min(260px, 78vw);
+    padding: 14px 22px;
+    border: 2.5px solid var(--nav-color, var(--navy));
+    border-radius: 14px;
+    color: var(--nav-color, var(--navy));
+    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .site-nav a:not(.nav-whatsapp)::after {
+    display: none;
+  }
+  .site-nav a:not(.nav-whatsapp):active {
+    background: var(--nav-color, var(--navy));
+    color: var(--paper);
+  }
+  .site-nav a:nth-child(1) {
+    --nav-color: var(--red);
+  }
+  .site-nav a:nth-child(2) {
+    --nav-color: var(--green);
+  }
+  .site-nav a:nth-child(3) {
+    --nav-color: var(--blue);
+  }
+  .site-nav a:nth-child(4) {
+    --nav-color: var(--purple);
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+  .nav-toggle.is-open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .nav-toggle.is-open span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle.is-open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero {
+  position: relative;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: clamp(48px, 9vw, 96px) var(--gutter) clamp(56px, 8vw, 90px);
+  text-align: center;
+  /* No overflow:hidden here on purpose: it used to clip the old
+     absolutely-positioned rainbow, but combined with the 3D-rotating
+     palette inside .hero-decor (transform-style: preserve-3d on a
+     continuously-animating element), that's exactly the pattern known to
+     make WebKit/Safari fail to paint the clipped element's contents at
+     all — the whole hero could render blank. The rainbow is flow-
+     positioned now and doesn't need the clip; body already has
+     overflow-x: hidden globally for anything that does spill over. */
+  scroll-margin-top: var(--header-h);
+}
+
+.hero-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  perspective: 900px;
+}
+
+/* Each decorative element lives in its own unanimated wrapper so JS can
+   drive a cursor-parallax offset via custom properties without fighting
+   the element's own CSS keyframe animation (which lives on the child). */
+.parallax-layer {
+  position: absolute;
+  transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0);
+  will-change: transform;
+}
+
+.depth-1 {
+  opacity: 0.75;
+}
+.depth-2 {
+  opacity: 0.92;
+}
+.depth-3 {
+  opacity: 1;
+}
+
+/* A normal-flow element, not an absolutely-positioned overlay — earlier
+   versions tried to float the rainbow above the hero via a negative top
+   offset, tuned by hand against one viewport width. Under a *different*
+   viewport width the same offset didn't scale with the rainbow's own
+   (also responsive) size, so it drifted into overlapping the title text.
+   Flow layout sidesteps that whole class of bug: whatever height the
+   rainbow renders at, it pushes the eyebrow/title down by exactly that
+   much, so overlap is structurally impossible rather than avoided by a
+   tuned constant. It still gets the cursor-parallax nudge from
+   .parallax-layer, since transforms don't affect layout. */
+.rainbow-wrap {
+  position: static;
+  display: flex;
+  justify-content: center;
+  margin: 0 0 10px;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.rainbow {
+  display: block;
+  width: min(360px, 62vw);
+  height: auto;
+}
+
+/* pos-1/pos-3 and pos-2/pos-4 are deliberate mirrored pairs (same top%,
+   matching left/right offset) — these four are the only ones still
+   visible at phone widths (pos-5/6/7/palette3d hide below 860px), so
+   they need to read as a composed, symmetric arrangement rather than
+   scattered points. */
+.pos-1 {
+  top: 13%;
+  left: 6%;
+}
+.pos-2 {
+  top: 66%;
+  left: 5%;
+}
+.pos-3 {
+  top: 13%;
+  right: 6%;
+}
+.pos-4 {
+  top: 66%;
+  right: 5%;
+}
+.pos-5 {
+  top: 42%;
+  right: 17%;
+}
+.pos-6 {
+  top: 6%;
+  left: 30%;
+}
+.pos-7 {
+  top: 76%;
+  left: 20%;
+}
+.pos-palette3d {
+  top: 34%;
+  left: 88%;
+}
+
+.floaty {
+  display: block;
+  width: clamp(28px, 4.2vw, 38px);
+  height: clamp(28px, 4.2vw, 38px);
+  filter: drop-shadow(0 6px 10px rgba(30, 42, 94, 0.18));
+}
+
+.depth-1 .floaty {
+  width: clamp(20px, 3vw, 26px);
+  height: clamp(20px, 3vw, 26px);
+  filter: drop-shadow(0 4px 6px rgba(30, 42, 94, 0.12));
+}
+.depth-3 .floaty {
+  width: clamp(32px, 5.2vw, 46px);
+  height: clamp(32px, 5.2vw, 46px);
+  filter: drop-shadow(0 10px 14px rgba(30, 42, 94, 0.22));
+}
+
+.anim-bob {
+  animation: floatBob 6s ease-in-out infinite;
+}
+.anim-spin {
+  animation: floatSpin 7s linear infinite;
+}
+.anim-spin-slow {
+  animation: floatSpin 14s linear infinite;
+}
+.anim-pulse {
+  animation: floatPulse 3.4s ease-in-out infinite;
+}
+.anim-drift {
+  animation: floatDrift 8s ease-in-out infinite;
+}
+
+.pos-2 .floaty,
+.pos-4 .floaty,
+.pos-5 .floaty {
+  animation-delay: 1.1s;
+}
+.pos-3 .floaty,
+.pos-6 .floaty {
+  animation-delay: 0.5s;
+}
+.pos-7 .floaty {
+  animation-delay: 2s;
+}
+
+@keyframes floatBob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(6deg);
+  }
+}
+
+@keyframes floatSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes floatPulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(-6deg);
+  }
+  50% {
+    transform: scale(1.25) rotate(6deg);
+  }
+}
+
+@keyframes floatDrift {
+  0%,
+  100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateX(16px) translateY(-10px) rotate(-8deg);
+  }
+}
+
+/* A genuinely 3D object: a flat SVG spun on the Y axis inside a
+   perspective wrapper, which real-projects perspective/foreshortening
+   rather than faking it — pure CSS transforms, GPU-composited. */
+.palette-3d {
+  perspective: 500px;
+}
+
+.palette-3d-face {
+  animation: paletteSpin 9s linear infinite;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 14px 18px rgba(30, 42, 94, 0.28));
+}
+
+@keyframes paletteSpin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+@media (max-width: 860px) {
+  .pos-palette3d,
+  .pos-6,
+  .pos-7 {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .pos-5 {
+    display: none;
+  }
+}
+
+.hero-eyebrow {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--purple);
+  background: var(--paper);
+  box-shadow: 0 2px 10px rgba(30, 42, 94, 0.1);
+  padding: 6px 18px;
+  border-radius: 100px;
+  margin-bottom: 18px;
+}
+
+.hero-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6.5vw, 4rem);
+  line-height: 1.1;
+  color: var(--navy);
+  max-width: 820px;
+  margin: 0 auto 20px;
+  text-wrap: balance;
+}
+
+.title-accent {
+  color: var(--red);
+}
+
+.hero-services {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  margin-bottom: 22px;
+}
+
+.hero-services span:nth-of-type(4n + 1) {
+  color: var(--red);
+}
+.hero-services span:nth-of-type(4n + 2) {
+  color: var(--orange);
+}
+.hero-services span:nth-of-type(4n + 3) {
+  color: var(--green);
+}
+.hero-services span:nth-of-type(4n) {
+  color: var(--purple);
+}
+.hero-services .dot {
+  color: var(--ink-faint);
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  margin: 0 auto 34px;
+  color: var(--ink-soft);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+}
+
+.hero-copy strong {
+  color: var(--navy);
+}
+
+.hero-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.hero-age-badge {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--navy);
+  background: var(--yellow);
+  padding: 8px 20px;
+  border-radius: 100px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 14px 26px;
+  border-radius: 100px;
+  /* A chunky "physical button" lip via a solid offset shadow, pressed flat
+     on :active — tactile rather than a flat hover-fade. */
+  transition: transform 0.12s var(--ease-out), box-shadow 0.12s var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+
+.btn-whatsapp {
+  color: #fff;
+  background: var(--whatsapp);
+  box-shadow: 0 5px 0 var(--whatsapp-dark), var(--shadow-soft);
+}
+
+.btn-whatsapp:hover {
+  background: var(--whatsapp);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 var(--whatsapp-dark), var(--shadow-lift);
+}
+
+.btn-whatsapp:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--whatsapp-dark), var(--shadow-soft);
+}
+
+.btn-outline {
+  color: var(--navy);
+  background: var(--paper);
+  border: 2px solid var(--navy);
+  box-shadow: 0 5px 0 var(--navy);
+}
+
+.btn-outline:hover {
+  background: var(--navy);
+  color: var(--paper);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 var(--navy-deep);
+}
+
+.btn-outline:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--navy-deep);
+}
+
+.btn-small {
+  padding: 11px 20px;
+  font-size: 0.92rem;
+}
+
+/* ============================================================
+   Marquee
+   ============================================================ */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  background: var(--olive);
+  padding: 14px 0;
+  white-space: nowrap;
+  transform: rotate(-1deg);
+  box-shadow: var(--shadow-soft);
+}
+
+.marquee-track {
+  display: inline-flex;
+  gap: 28px;
+  align-items: center;
+  animation: marquee 28s linear infinite;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--navy);
+}
+
+.marquee-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ============================================================
+   Art story — a pinned, scroll-driven illustration: a pencil draws a
+   line, then a brush dabs color onto the canvas as the section scrolls
+   past. Progress is computed in JS from scroll position and expressed
+   through plain transforms/stroke-dashoffset — cheap per-frame writes,
+   no layout thrash.
+   ============================================================ */
+.art-story {
+  position: relative;
+  height: 280vh;
+}
+
+.art-story.is-static {
+  height: auto;
+}
+
+.art-story-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  gap: 22px;
+}
+
+.art-story.is-static .art-story-sticky {
+  position: static;
+  height: auto;
+  padding: clamp(56px, 9vw, 100px) var(--gutter);
+}
+
+.art-story-easel {
+  position: relative;
+  width: min(420px, 80vw);
+}
+
+.art-story-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 20px 30px rgba(30, 42, 94, 0.18));
+}
+
+#art-story-line {
+  stroke-dashoffset: 1;
+}
+
+.art-story-blob {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transform: scale(0);
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.art-story-blob.is-in {
+  transform: scale(1);
+}
+
+.art-story.is-static .art-story-blob {
+  transform: scale(1);
+}
+
+.art-story-pencil,
+.art-story-brush {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  filter: drop-shadow(0 8px 10px rgba(30, 42, 94, 0.28));
+  transform: rotate(var(--tool-rot, 0deg));
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-out);
+  pointer-events: none;
+}
+
+.art-story-pencil.is-visible,
+.art-story-brush.is-visible {
+  opacity: 1;
+}
+
+.art-story.is-static .art-story-pencil,
+.art-story.is-static .art-story-brush {
+  display: none;
+}
+
+.art-story-caption {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  color: var(--navy);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+
+.art-story-caption.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.art-story.is-static .art-story-caption {
+  opacity: 1;
+  transform: none;
+}
+
+/* A cue for the moment the pinned section first comes into view — the
+   canvas starts blank, so without this the section can read as empty
+   dead space rather than "there's more here, keep going." Fades out as
+   soon as the drawing actually starts. */
+.art-story-scrollcue {
+  position: absolute;
+  /* Clears the sticky Enrol bar, which is pinned to the viewport bottom
+     for this entire section and would otherwise sit right on top of it. */
+  bottom: clamp(96px, 16vh, 130px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-faint);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.art-story-scrollcue.is-visible {
+  opacity: 1;
+}
+
+.art-story-scrollcue svg {
+  animation: scrollCueBounce 1.6s ease-in-out infinite;
+}
+
+@keyframes scrollCueBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.art-story.is-static .art-story-scrollcue {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-story {
+    height: auto;
+  }
+  .art-story-sticky {
+    position: static;
+    height: auto;
+    padding: clamp(56px, 9vw, 100px) var(--gutter);
+  }
+  .art-story-pencil,
+  .art-story-brush {
+    display: none;
+  }
+  .art-story-blob {
+    transform: scale(1);
+  }
+  .art-story-caption {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================================
+   Classes grid
+   ============================================================ */
+.classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: clamp(16px, 2.4vw, 26px);
+}
+
+.class-card {
+  perspective: 1000px;
+  border-radius: 22px;
+  cursor: pointer;
+}
+
+.js-ready .class-card {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.js-ready .class-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* The flip itself: a real 3D rotation, not a faked cross-fade. Hover
+   drives it on devices with a pointer; a tap toggles .is-flipped for
+   touch (see flipCard.ts), since touch has no hover to key off. */
+.class-card-flip {
+  position: relative;
+  height: 300px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  box-shadow: var(--shadow-soft);
+  border-radius: 22px;
+}
+
+.class-card:hover .class-card-flip,
+.class-card.is-flipped .class-card-flip {
+  transform: rotateY(180deg);
+}
+
+.class-card:hover,
+.class-card.is-flipped {
+  transform: translateY(-6px);
+}
+
+.class-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 22px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid var(--line-soft);
+}
+
+.class-card-front {
+  background: var(--paper);
+}
+
+.class-card-back {
+  background: var(--navy);
+  color: var(--paper);
+  transform: rotateY(180deg);
+}
+
+.class-icon {
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.class-icon svg {
+  width: 38px;
+  height: 38px;
+}
+
+.class-card-face h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: inherit;
+  margin-bottom: 8px;
+}
+
+.class-card-front h3 {
+  color: var(--navy);
+}
+
+.class-card-face p {
+  color: var(--ink-soft);
+  font-size: 0.94rem;
+}
+
+.class-card-back p {
+  color: rgba(255, 253, 246, 0.85);
+}
+
+.class-card-hint {
+  margin-top: 14px;
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+}
+
+.class-card-hint .hint-tap {
+  display: none;
+}
+
+@media (hover: none) {
+  .class-card-hint .hint-hover {
+    display: none;
+  }
+  .class-card-hint .hint-tap {
+    display: inline;
+  }
+}
+
+.class-card-tag {
+  margin-top: 16px;
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--navy);
+  background: var(--yellow);
+  padding: 6px 14px;
+  border-radius: 100px;
+}
+
+/* ============================================================
+   Why-us section
+   ============================================================ */
+.why-section {
+  background: var(--paper-warm);
+  border-radius: 36px;
+  max-width: calc(var(--content-max) + var(--gutter) * 2);
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: clamp(32px, 6vw, 72px);
+  align-items: center;
+}
+
+.why-copy .section-title {
+  margin: 6px 0 16px;
+  text-align: left;
+}
+
+.why-copy p {
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  margin-bottom: 24px;
+}
+
+.why-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.why-list li {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.why-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.why-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.why-list h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.why-list p {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 860px) {
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+  .why-copy .section-title,
+  .why-copy p {
+    text-align: left;
+  }
+}
+
+/* ============================================================
+   Gallery ("what your child will create")
+   ============================================================ */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(16px, 2.4vw, 24px);
+}
+
+.craft-card {
+  position: relative;
+  perspective: 900px;
+  aspect-ratio: 4 / 5;
+  padding: 14px 10px 0;
+}
+
+.js-ready .craft-card {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.js-ready .craft-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.craft-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  border: 6px solid #fff;
+  border-bottom-width: 26px;
+  /* Deliberately flat (the default), not preserve-3d: this element also
+     has overflow:hidden for its rounded corners, and that combination
+     with a 3D transform context is a known WebKit bug that can blank out
+     the clipped element's rendering entirely. It doesn't need preserve-3d
+     anyway — nothing inside it relies on its own 3D depth relative to its
+     siblings for the tilt (rotateY/rotateX from tilt.ts) to render. */
+  transform: rotate(var(--craft-rotate, 0deg));
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+
+.craft-card:hover .craft-card-inner {
+  box-shadow: var(--shadow-lift);
+}
+
+/* A little strip of "washi tape" pinning the photo down, like a scrapbook
+   or a studio corkboard rather than a flat, uniform image grid. */
+.craft-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 64px;
+  height: 22px;
+  margin-left: -32px;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.55) 6px,
+    rgba(255, 255, 255, 0.3) 6px,
+    rgba(255, 255, 255, 0.3) 12px
+  ),
+  var(--yellow);
+  opacity: 0.85;
+  transform: translateZ(6px) rotate(-3deg);
+  box-shadow: 0 3px 6px rgba(30, 20, 10, 0.15);
+  z-index: 2;
+}
+
+.craft-art {
+  position: absolute;
+  inset: 0;
+  background: var(--craft-bg);
+}
+
+.craft-scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16px;
+  background: linear-gradient(0deg, rgba(30, 20, 10, 0.75) 0%, rgba(30, 20, 10, 0.28) 55%, transparent 100%);
+}
+
+.craft-scrim h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+.craft-scrim p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.82rem;
+}
+
+/* ============================================================
+   Visit / contact
+   ============================================================ */
+.visit-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--paper);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lift);
+  border: 1px solid var(--line-soft);
+}
+
+.visit-info {
+  padding: clamp(28px, 4vw, 48px);
+}
+
+.visit-info .section-tag {
+  margin-bottom: 12px;
+}
+
+.visit-info .section-title {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.visit-address {
+  display: block;
+  font-size: 1.02rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 22px;
+  padding: 14px 18px;
+  background: var(--lavender-soft);
+  border-radius: 14px;
+  border-left: 5px solid var(--lavender);
+}
+
+.visit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.visit-note {
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.visit-map {
+  min-height: 320px;
+  position: relative;
+}
+
+.visit-map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 780px) {
+  .visit-card {
+    grid-template-columns: 1fr;
+  }
+  .visit-map {
+    min-height: 260px;
+  }
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  background: var(--navy);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 32px var(--gutter) 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.footer-brand .brand-name {
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.footer-brand .brand-tagline {
+  color: var(--yellow);
+}
+
+.footer-address,
+.footer-phone {
+  font-size: 0.9rem;
+}
+
+.footer-phone {
+  font-weight: 700;
+  color: var(--yellow);
+}
+
+.footer-copy {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+@media (max-width: 620px) {
+  .site-footer {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* ============================================================
+   WhatsApp floating action button
+   ============================================================ */
+.whatsapp-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 150;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--whatsapp);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 26px -6px rgba(37, 211, 102, 0.6);
+  animation: fabPulse 2.8s ease-in-out infinite;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.whatsapp-fab:hover {
+  transform: scale(1.08);
+}
+
+@keyframes fabPulse {
+  0%,
+  100% {
+    box-shadow: 0 10px 26px -6px rgba(37, 211, 102, 0.6);
+  }
+  50% {
+    box-shadow: 0 10px 30px -4px rgba(37, 211, 102, 0.85), 0 0 0 8px rgba(37, 211, 102, 0.12);
+  }
+}
+
+.whatsapp-fab.is-hidden {
+  opacity: 0;
+  transform: scale(0.6);
+  pointer-events: none;
+}
+
+/* ============================================================
+   Sticky "Enrol Now" bar — slides in once the hero has scrolled
+   past, and steps aside again once the footer (which already carries
+   contact details) comes into view, so it never overlaps content.
+   ============================================================ */
+.enrol-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 140;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px var(--gutter);
+  background: var(--paper);
+  border-top: 2px solid var(--line-soft);
+  box-shadow: 0 -10px 28px -10px rgba(30, 42, 94, 0.2);
+  transform: translateY(110%);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.enrol-bar.is-visible {
+  transform: translateY(0);
+}
+
+.enrol-bar-text {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.enrol-bar-text strong {
+  color: var(--navy);
+  font-family: var(--font-display);
+}
+
+@media (max-width: 620px) {
+  .enrol-bar {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  .enrol-bar-text {
+    font-size: 0.8rem;
+  }
+  .enrol-bar-text strong {
+    display: block;
+  }
+}
+
+/* ============================================================
+   Reveal-on-scroll — visible by default; only hidden once JS
+   confirms it's running, so a slow/failed script never hides
+   real content.
+   ============================================================ */
+.js-ready .reveal-up {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.js-ready .reveal-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.js-ready .hero-eyebrow.is-visible {
+  transition-delay: 0s;
+}
+.js-ready .hero-title.is-visible {
+  transition-delay: 0.08s;
+}
+.js-ready .hero-services.is-visible {
+  transition-delay: 0.16s;
+}
+.js-ready .hero-copy.is-visible {
+  transition-delay: 0.24s;
+}
+.js-ready .hero-actions.is-visible {
+  transition-delay: 0.32s;
+}
+.js-ready .hero-age-badge.is-visible {
+  transition-delay: 0.4s;
+}
+
+/* ============================================================
+   Accessibility & performance guards
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.2s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Small-screen refinements
+   ============================================================ */
+@media (max-width: 620px) {
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn {
+    justify-content: center;
+  }
+  .marquee {
+    transform: none;
+  }
+}
