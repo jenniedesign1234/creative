@@ -1463,7 +1463,12 @@ main {
 .whatsapp-fab {
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  /* Netlify injects its own "Powered by Netlify" badge as a fixed,
+     always-on-top (z-index ~2^31) iframe pinned to the bottom-right
+     corner, ~64px tall — outside our control, can't be hidden via CSS
+     since it lives in its own iframe document. Sitting this well above
+     it (rather than at bottom:20px) keeps the two from overlapping. */
+  bottom: 76px;
   z-index: 150;
   width: 60px;
   height: 60px;
@@ -1507,7 +1512,10 @@ main {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
+  /* Same reason as .whatsapp-fab above: clears Netlify's injected badge
+     in the bottom-right corner instead of the Enroll Now button sitting
+     underneath it. */
+  bottom: 72px;
   z-index: 140;
   display: flex;
   align-items: center;
